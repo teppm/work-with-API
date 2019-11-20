@@ -1,11 +1,21 @@
-var xhr = new XMLHttpRequest();
+function getData(cb) {
+    var xhr = new XMLHttpRequest();
 
-xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("data").innerHTML = this.responseText;
-    }
-};
+    xhr.open("GET", "https://swapi.co/api/");
 
-xhr.open("GET", "https://swapi.co/api/");
+    xhr.send();
 
-xhr.send();
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            cb(JSON.parse(this.responseText));
+
+        }
+    };
+
+}
+
+function printDataToConsole(data) {
+    console.log(data);
+}
+
+getData(printDataToConsole);
