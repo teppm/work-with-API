@@ -1,7 +1,9 @@
-function getData(cb) {
+const baseURL = "https://swapi.co/api/";
+
+function getData(type, cb) {
     var xhr = new XMLHttpRequest();
 
-    xhr.open("GET", "https://swapi.co/api/");
+    xhr.open("GET", baseURL + type + '/');
 
     xhr.send();
 
@@ -14,8 +16,30 @@ function getData(cb) {
 
 }
 
-function printDataToConsole(data) {
-    console.log(data);
-}
+function getTableHeaders(obj) {
+    var tableHeaders = [];
+    Object.keys(obj).forEach(function(key) {
+        tableHeaders.push(`<td>${key}</td>`);
+    });
 
-getData(printDataToConsole);
+    return `<tr>${tableHeaders}</tr>`;
+};
+
+function writeToDocument(type) {
+    var el = document.getElementById('data');
+    el.innerHTML = '';
+
+    getData(type, function(data) {
+        data = data.results;
+        var tableHeaders = getTableHeaders(data[0]);
+
+        data.forEach(function(item) {
+            Object.keys(item).forEach(function(key) {
+                    console.log(key);
+                })
+                //el.innerHTML += '<p>' + item.name + '</p>';
+        });
+
+        el.innerHTML = `<table>${tableHeaders}</table>`;
+    });
+};
